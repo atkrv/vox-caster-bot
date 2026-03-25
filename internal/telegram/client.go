@@ -168,7 +168,7 @@ func (c *httpClient) apiCall(ctx context.Context, method string, params url.Valu
 // FormatNewPage builds a caption/message for a newly created wiki page.
 func FormatNewPage(item feed.Item, pageURL string) string {
 	var b strings.Builder
-	b.WriteString("🔥 Warpopedia — новый перевод\n\n")
+	b.WriteString("New page\n\n")
 	if pageURL != "" {
 		b.WriteString(fmt.Sprintf("<b><a href=\"%s\">%s</a></b>\n", escapeHTML(pageURL), escapeHTML(item.Title)))
 	} else {
@@ -177,18 +177,17 @@ func FormatNewPage(item feed.Item, pageURL string) string {
 		b.WriteString("</b>\n")
 	}
 	if item.Author != "" {
-		b.WriteString("👤 <i>")
+		b.WriteString("<i>")
 		b.WriteString(escapeHTML(item.Author))
 		b.WriteString("</i>\n")
 	}
-	b.WriteString("\n🏷 #vox #new")
 	return b.String()
 }
 
 // FormatUpdate builds a caption/message for a wiki page update.
 func FormatUpdate(item feed.Item, pageURL string) string {
 	var b strings.Builder
-	b.WriteString("📢 Warpopedia — обновление перевода\n\n")
+	b.WriteString("Updated\n\n")
 	if pageURL != "" {
 		b.WriteString(fmt.Sprintf("<b><a href=\"%s\">%s</a></b>\n", escapeHTML(pageURL), escapeHTML(item.Title)))
 	} else {
@@ -197,11 +196,10 @@ func FormatUpdate(item feed.Item, pageURL string) string {
 		b.WriteString("</b>\n")
 	}
 	if item.Author != "" {
-		b.WriteString("👤 <i>")
+		b.WriteString("<i>")
 		b.WriteString(escapeHTML(item.Author))
 		b.WriteString("</i>\n")
 	}
-	b.WriteString("\n🏷 #vox #update")
 	return b.String()
 }
 

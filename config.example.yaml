@@ -9,6 +9,27 @@ insecure_skip_verify: false
 feeds:
   - url: "https://wiki.example.com/index.php?title=Special:NewPages&feed=rss"
     type: "new_page"
-    # template: "optional Go template, see README"
+    template: |-
+      ✨ My Wiki — new article
+
+      {{if .PageURL}}<b><a href="{{.PageURL}}">{{html .Title}}</a></b>
+      {{- else}}<b>{{html .Title}}</b>
+      {{- end}}
+      {{- if .Author}}
+      👤 <i>{{html .Author}}</i>
+      {{- end}}
+
+      🏷 #wiki #new
   - url: "https://wiki.example.com/api.php?action=feedrecentchanges&feedformat=rss"
     type: "update"
+    template: |-
+      📝 My Wiki — updated
+
+      {{if .PageURL}}<b><a href="{{.PageURL}}">{{html .Title}}</a></b>
+      {{- else}}<b>{{html .Title}}</b>
+      {{- end}}
+      {{- if .Author}}
+      👤 <i>{{html .Author}}</i>
+      {{- end}}
+
+      🏷 #wiki #update

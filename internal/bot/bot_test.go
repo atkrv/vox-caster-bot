@@ -279,7 +279,7 @@ func TestPoll_UsesCorrectTemplate(t *testing.T) {
 	if len(tg.sent) != 1 {
 		t.Fatalf("sent %d, want 1", len(tg.sent))
 	}
-	if msg := tg.sent[0].Text; !containsStr(msg, "новый перевод") {
+	if msg := tg.sent[0].Text; !containsStr(msg, "New page") {
 		t.Errorf("expected new page template, got:\n%s", msg)
 	}
 }

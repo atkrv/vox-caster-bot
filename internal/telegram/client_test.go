@@ -115,17 +115,14 @@ func TestFormatNewPage(t *testing.T) {
 	}
 	msg := FormatNewPage(item, "https://wiki.example.com/Test_Page")
 
-	if !strings.Contains(msg, "новый перевод") {
+	if !strings.Contains(msg, "New page") {
 		t.Error("missing new page header")
 	}
 	if !strings.Contains(msg, `<b><a href="https://wiki.example.com/Test_Page">Test Page</a></b>`) {
 		t.Errorf("missing bold linked title in:\n%s", msg)
 	}
-	if !strings.Contains(msg, "👤 <i>Alice</i>") {
+	if !strings.Contains(msg, "<i>Alice</i>") {
 		t.Error("missing italic author")
-	}
-	if !strings.Contains(msg, "#vox #new") {
-		t.Error("missing hashtags")
 	}
 }
 
@@ -137,17 +134,14 @@ func TestFormatUpdate(t *testing.T) {
 	}
 	msg := FormatUpdate(item, "https://wiki.example.com/index.php?title=Test")
 
-	if !strings.Contains(msg, "обновление перевода") {
+	if !strings.Contains(msg, "Updated") {
 		t.Error("missing update header")
 	}
 	if !strings.Contains(msg, `<b><a href="https://wiki.example.com/index.php?title=Test">Test Page</a></b>`) {
 		t.Errorf("missing bold linked title in:\n%s", msg)
 	}
-	if !strings.Contains(msg, "👤 <i>Bob</i>") {
+	if !strings.Contains(msg, "<i>Bob</i>") {
 		t.Error("missing italic author")
-	}
-	if !strings.Contains(msg, "#vox #update") {
-		t.Error("missing hashtags")
 	}
 }
 
@@ -155,12 +149,12 @@ func TestFormatMessage_PicksTemplate(t *testing.T) {
 	item := feed.Item{Title: "X", Author: "Y"}
 
 	newMsg := FormatMessage(nil, config.FeedNewPage, item, "https://example.com")
-	if !strings.Contains(newMsg, "новый перевод") {
+	if !strings.Contains(newMsg, "New page") {
 		t.Error("FeedNewPage should use new page template")
 	}
 
 	updMsg := FormatMessage(nil, config.FeedUpdate, item, "https://example.com")
-	if !strings.Contains(updMsg, "обновление перевода") {
+	if !strings.Contains(updMsg, "Updated") {
 		t.Error("FeedUpdate should use update template")
 	}
 }
