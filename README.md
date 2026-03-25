@@ -29,10 +29,14 @@ go build ./cmd/vox-caster-bot
 ### Docker
 
 ```bash
-TELEGRAM_TOKEN=your_token docker compose up --build
+cp config.yaml /path/to/deploy/
+cd /path/to/deploy
+TELEGRAM_TOKEN=your_token docker compose up -d
 ```
 
-Or pull from GitHub Container Registry:
+`state.json` is saved in the same directory as `docker-compose.yml` automatically.
+
+Pull the image manually:
 
 ```bash
 docker pull ghcr.io/atkrv/vox-caster-bot:latest
