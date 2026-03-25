@@ -2,7 +2,7 @@
 
 <img width="256" height="256" alt="vox-caster-art" src="https://github.com/user-attachments/assets/6173c6eb-f602-4d0d-8442-3ffcac8a01bc" />
 
-Telegram bot that polls MediaWiki RSS feeds and forwards new or updated pages to a Telegram channel with cover images.
+Vibe-coded Telegram bot that polls MediaWiki RSS feeds and forwards new or updated pages to a Telegram channel with cover images.
 
 ## Features
 
