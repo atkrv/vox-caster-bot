@@ -2,8 +2,12 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"flag"
+	"fmt"
 	"log"
+	"net/http"
+	"net/url"
 	"os/signal"
 	"syscall"
 
@@ -25,6 +29,11 @@ func main() {
 		log.Fatalf("load config: %v", err)
 	}
 
+	httpClient, err := buildHTTPClient(cfg.InsecureSkipVerify, cfg.ProxyURL)
+	if err != nil {
+		log.Fatalf("build http client: %v", err)
+	}
+
 	store, err := state.NewFileStore(cfg.StatePath, cfg.StateMaxAge)
 	if err != nil {
 		log.Fatalf("load state: %v", err)
@@ -34,13 +43,13 @@ func main() {
 		Feeds:     cfg.Feeds,
 		ChannelID: cfg.ChannelID,
 		Interval:  cfg.PollInterval,
-		Fetcher:   feed.NewHTTPFetcher(cfg.InsecureSkipVerify),
+		Fetcher:   feed.NewHTTPFetcher(httpClient),
 		State:     store,
-		Telegram:  telegram.NewClient(cfg.TelegramToken),
+		Telegram:  telegram.NewClient(cfg.TelegramToken, httpClient),
 	}
 
 	if cfg.WikiAPI != "" {
-		b.Wiki = wiki.NewClient(cfg.WikiAPI, cfg.InsecureSkipVerify)
+		b.Wiki = wiki.NewClient(cfg.WikiAPI, httpClient)
 	}
 
 	ctx, cancel := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
@@ -54,4 +63,22 @@ func main() {
 	if err := b.Run(ctx); err != nil {
 		log.Fatalf("bot error: %v", err)
 	}
+}
+
+func buildHTTPClient(insecureSkipVerify bool, proxyURL string) (*http.Client, error) {
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+
+	if proxyURL != "" {
+		u, err := url.Parse(proxyURL)
+		if err != nil {
+			return nil, fmt.Errorf("parse proxy_url: %w", err)
+		}
+		transport.Proxy = http.ProxyURL(u)
+	}
+
+	if insecureSkipVerify {
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	}
+
+	return &http.Client{Transport: transport}, nil
 }

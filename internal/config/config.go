@@ -54,6 +54,7 @@ type Config struct {
 	StateMaxAge        time.Duration `yaml:"-"`
 	WikiAPI            string        `yaml:"-"`
 	InsecureSkipVerify bool          `yaml:"-"`
+	ProxyURL           string        `yaml:"-"`
 }
 
 type rawConfig struct {
@@ -65,6 +66,7 @@ type rawConfig struct {
 	StateMaxAge        string       `yaml:"state_max_age"`
 	WikiAPI            string       `yaml:"wiki_api"`
 	InsecureSkipVerify bool         `yaml:"insecure_skip_verify"`
+	ProxyURL           string       `yaml:"proxy_url"`
 }
 
 func Load(path string) (*Config, error) {
@@ -139,5 +141,6 @@ func Load(path string) (*Config, error) {
 		StateMaxAge:        stateMaxAge,
 		WikiAPI:            raw.WikiAPI,
 		InsecureSkipVerify: raw.InsecureSkipVerify,
+		ProxyURL:           raw.ProxyURL,
 	}, nil
 }

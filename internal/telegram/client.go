@@ -38,20 +38,20 @@ type httpClient struct {
 	http    *http.Client
 }
 
-func NewClient(token string) Client {
+func NewClient(token string, client *http.Client) Client {
 	return &httpClient{
 		token:   token,
 		apiBase: defaultAPIBase,
-		http:    &http.Client{},
+		http:    client,
 	}
 }
 
 // NewClientWithBase creates a client pointing at a custom API base URL (for testing).
-func NewClientWithBase(token, apiBase string) Client {
+func NewClientWithBase(token, apiBase string, client *http.Client) Client {
 	return &httpClient{
 		token:   token,
 		apiBase: apiBase,
-		http:    &http.Client{},
+		http:    client,
 	}
 }
 

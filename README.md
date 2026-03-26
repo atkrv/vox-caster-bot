@@ -10,7 +10,7 @@ Vibe-coded Telegram bot that polls MediaWiki RSS feeds and forwards new or updat
 - Two built-in message templates: **new page** and **page update**
 - Custom [Go templates](#custom-templates) per feed
 - Cover images fetched from the MediaWiki `pageimages` API
-- Photo upload with automatic text-only fallback
+- Cover image upload with automatic text-only fallback
 - First-run safety: existing items are marked as seen without sending
 - Time-based state expiry (default 30 days)
 - One-shot mode for testing and cron-based scheduling
@@ -52,6 +52,7 @@ state_path: "state.json"             # default: state.json
 state_max_age: "720h"                # default: 720h (30 days)
 wiki_api: "https://wiki.example.com/api.php"  # optional, enables cover images
 insecure_skip_verify: false          # skip TLS verification
+# proxy_url: "http://proxy:8080"   # optional; http://, https://, socks5://
 
 feeds:
   - url: "https://wiki.example.com/index.php?title=Special:NewPages&feed=rss"
@@ -69,6 +70,7 @@ feeds:
 | `state_max_age` | no | `720h` | How long to remember seen items |
 | `wiki_api` | no | — | MediaWiki API endpoint for cover images |
 | `insecure_skip_verify` | no | `false` | Skip TLS certificate verification |
+| `proxy_url` | no | — | Proxy URL (`http://`, `https://`, `socks5://`). Falls back to `HTTP_PROXY`/`HTTPS_PROXY` env vars |
 | `feeds[].url` | yes | — | RSS/Atom feed URL |
 | `feeds[].type` | yes | — | `new_page` or `update` |
 | `feeds[].template` | no | — | Custom Go template string |
@@ -136,7 +138,7 @@ internal/
    - Extract page title from the item link
    - Format the message text (custom template or built-in)
    - Fetch cover image from MediaWiki API (if `wiki_api` configured)
-   - Send photo to Telegram (falls back to text-only on failure)
+   - Send cover image to Telegram (falls back to text-only on failure)
    - Mark item as seen, save state immediately
 4. On first run for a feed, all items are marked as seen without sending
 

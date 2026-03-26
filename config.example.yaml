@@ -5,6 +5,8 @@ state_path: "state.json"
 state_max_age: "720h"  # 30 days; items older than this are forgotten and may be re-sent
 wiki_api: "https://wiki.example.com/api.php"
 insecure_skip_verify: false
+# proxy_url: "http://proxy.example.com:8080"    # optional; supports http://, https://, socks5://
+                                                 # leave unset to use HTTP_PROXY/HTTPS_PROXY env vars
 
 feeds:
   - url: "https://wiki.example.com/index.php?title=Special:NewPages&feed=rss"

@@ -2,7 +2,6 @@ package feed
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -33,17 +32,16 @@ type HTTPFetcher struct {
 	client *http.Client
 }
 
-func NewHTTPFetcher(insecureSkipVerify bool) *HTTPFetcher {
-	client := &http.Client{Timeout: 30 * time.Second}
-	if insecureSkipVerify {
-		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
+const fetchTimeout = 30 * time.Second
+
+func NewHTTPFetcher(client *http.Client) *HTTPFetcher {
 	return &HTTPFetcher{parser: gofeed.NewParser(), client: client}
 }
 
 func (f *HTTPFetcher) Fetch(ctx context.Context, feedURL string) ([]Item, error) {
+	ctx, cancel := context.WithTimeout(ctx, fetchTimeout)
+	defer cancel()
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, feedURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("create request for %s: %w", feedURL, err)
