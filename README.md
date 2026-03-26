@@ -10,7 +10,7 @@ Vibe-coded Telegram bot that polls MediaWiki RSS feeds and forwards new or updat
 - Two built-in message templates: **new page** and **page update**
 - Custom [Go templates](#custom-templates) per feed
 - Cover images fetched from the MediaWiki `pageimages` API
-- Photo upload with automatic text-only fallback
+- Cover image upload with automatic text-only fallback
 - First-run safety: existing items are marked as seen without sending
 - Time-based state expiry (default 30 days)
 - One-shot mode for testing and cron-based scheduling
@@ -136,7 +136,7 @@ internal/
    - Extract page title from the item link
    - Format the message text (custom template or built-in)
    - Fetch cover image from MediaWiki API (if `wiki_api` configured)
-   - Send photo to Telegram (falls back to text-only on failure)
+   - Send cover image to Telegram (falls back to text-only on failure)
    - Mark item as seen, save state immediately
 4. On first run for a feed, all items are marked as seen without sending
 
