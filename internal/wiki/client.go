@@ -2,7 +2,6 @@ package wiki
 
 import (
 	"context"
-	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -22,13 +21,8 @@ type httpClient struct {
 	http    *http.Client
 }
 
-func NewClient(apiBase string, insecureSkipVerify bool) Client {
-	client := &http.Client{Timeout: 15 * time.Second}
-	if insecureSkipVerify {
-		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
+func NewClient(apiBase string, client *http.Client) Client {
+	client.Timeout = 15 * time.Second
 	return &httpClient{apiBase: apiBase, http: client}
 }
 

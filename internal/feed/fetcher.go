@@ -2,7 +2,6 @@ package feed
 
 import (
 	"context"
-	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -33,13 +32,8 @@ type HTTPFetcher struct {
 	client *http.Client
 }
 
-func NewHTTPFetcher(insecureSkipVerify bool) *HTTPFetcher {
-	client := &http.Client{Timeout: 30 * time.Second}
-	if insecureSkipVerify {
-		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
+func NewHTTPFetcher(client *http.Client) *HTTPFetcher {
+	client.Timeout = 30 * time.Second
 	return &HTTPFetcher{parser: gofeed.NewParser(), client: client}
 }
 

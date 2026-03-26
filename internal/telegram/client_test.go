@@ -30,7 +30,7 @@ func TestSend_MessageOnly(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := NewClientWithBase("testtoken", srv.URL)
+	c := NewClientWithBase("testtoken", srv.URL, &http.Client{})
 	err := c.Send(context.Background(), "@test", Message{Text: "hello"})
 	if err != nil {
 		t.Fatalf("unexpected error: %v", err)
@@ -55,7 +55,7 @@ func TestSend_WithPhoto(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := NewClientWithBase("testtoken", srv.URL)
+	c := NewClientWithBase("testtoken", srv.URL, &http.Client{})
 	err := c.Send(context.Background(), "@test", Message{
 		Text:     "hello",
 		ImageURL: "https://example.com/image.jpg",
@@ -82,7 +82,7 @@ func TestSend_PhotoFallbackToMessage(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := NewClientWithBase("testtoken", srv.URL)
+	c := NewClientWithBase("testtoken", srv.URL, &http.Client{})
 	err := c.Send(context.Background(), "@test", Message{
 		Text:     "hello",
 		ImageURL: "https://example.com/bad.jpg",
@@ -101,7 +101,7 @@ func TestSend_APIError(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	c := NewClientWithBase("testtoken", srv.URL)
+	c := NewClientWithBase("testtoken", srv.URL, &http.Client{})
 	err := c.Send(context.Background(), "@nonexistent", Message{Text: "test"})
 	if err == nil {
 		t.Fatal("expected error for API error response")
