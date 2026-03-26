@@ -32,12 +32,16 @@ type HTTPFetcher struct {
 	client *http.Client
 }
 
+const fetchTimeout = 30 * time.Second
+
 func NewHTTPFetcher(client *http.Client) *HTTPFetcher {
-	client.Timeout = 30 * time.Second
 	return &HTTPFetcher{parser: gofeed.NewParser(), client: client}
 }
 
 func (f *HTTPFetcher) Fetch(ctx context.Context, feedURL string) ([]Item, error) {
+	ctx, cancel := context.WithTimeout(ctx, fetchTimeout)
+	defer cancel()
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, feedURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("create request for %s: %w", feedURL, err)

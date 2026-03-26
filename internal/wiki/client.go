@@ -21,12 +21,16 @@ type httpClient struct {
 	http    *http.Client
 }
 
+const requestTimeout = 15 * time.Second
+
 func NewClient(apiBase string, client *http.Client) Client {
-	client.Timeout = 15 * time.Second
 	return &httpClient{apiBase: apiBase, http: client}
 }
 
 func (c *httpClient) FetchPageImage(ctx context.Context, pageTitle string) (string, error) {
+	ctx, cancel := context.WithTimeout(ctx, requestTimeout)
+	defer cancel()
+
 	params := url.Values{
 		"action":      {"query"},
 		"titles":      {pageTitle},
@@ -64,6 +68,9 @@ func (c *httpClient) FetchPageImage(ctx context.Context, pageTitle string) (stri
 }
 
 func (c *httpClient) DownloadImage(ctx context.Context, imageURL string) ([]byte, error) {
+	ctx, cancel := context.WithTimeout(ctx, requestTimeout)
+	defer cancel()
+
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, imageURL, nil)
 	if err != nil {
 		return nil, fmt.Errorf("create request: %w", err)
